@@ -5,6 +5,7 @@ repackage.up()
 import json
 
 import datetime
+import time
 
 import discord
 from discord.ext import commands
@@ -99,6 +100,8 @@ async def rev(ctx, num_cards: int, backlinks: str, tags: str, include: bool) -> 
     google_drive_manager.upload_text_file(
         parent_folder_id=config["rev_folder_id"], file_name=file_name, content=content
     )
+
+    time.sleep(5)
 
     file_link = google_drive_manager.get_file_link(
         parent_folder_id=config["rev_folder_id"], file_name=file_name
