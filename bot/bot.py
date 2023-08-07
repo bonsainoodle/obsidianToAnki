@@ -94,7 +94,7 @@ async def rev(ctx, num_cards: int, backlinks: str, tags: str, include: bool) -> 
     content = f"Titre: {file_name} - {len(selected_cards)} cartes\n"
 
     for card in selected_cards:
-        content += f"\n![[{card['name']}]]"
+        content += f"\n![[{card['name'].split('.')[0]}]]"
 
     google_drive_manager.upload_text_file(
         parent_folder_id=config["rev_folder_id"], file_name=file_name, content=content

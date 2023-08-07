@@ -136,7 +136,10 @@ class GoogleDriveManager:
             )
             .execute()
         )
+
         files = results.get("files", [])
+
+        print(files, file_name, parent_folder_id)
 
         if files:
             return files[0]["webViewLink"]
