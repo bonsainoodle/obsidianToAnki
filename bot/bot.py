@@ -57,7 +57,7 @@ async def update(ctx) -> None:
 
 
 @bot.command()
-async def rev(ctx, num_cards: int, *, args: str) -> None:
+async def rev(ctx, num_cards: int, *args: str) -> None:
     with open(f"{config['data_folder_path']}/data.json", "r", encoding="utf-8") as f:
         data = json.load(f)
 
