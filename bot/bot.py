@@ -4,6 +4,8 @@ repackage.up()
 
 import json
 
+import random
+
 import datetime
 import time
 
@@ -55,23 +57,40 @@ async def update(ctx) -> None:
 
 
 @bot.command()
-async def rev(ctx, num_cards: int, backlinks: str, tags: str, include: bool) -> None:
+async def rev(ctx, num_cards: int, *, args: str) -> None:
     with open(f"{config['data_folder_path']}/data.json", "r", encoding="utf-8") as f:
         data = json.load(f)
 
+    random.shuffle(data)
+
     selected_cards = []
+    tags = []
+    backlinks = []
+    include_tags = False
+    include_backlinks = False
+
+    for arg in args.split():
+        if arg.isdigit():
+            num_cards = int(arg)
+        elif arg.startswith("#"):
+            tags.append(arg[1:])
+        elif arg.startswith("[["):
+            backlinks.append(arg[2:-2])
+        elif arg == "include_tags":
+            include_tags = True
+        elif arg == "include_backlinks":
+            include_backlinks = True
 
     for card in data:
-        if all(tag in card["tags"] for tag in tags.split(",")) and all(
-            backlink in card["backlinks"] for backlink in backlinks.split(",")
+        if (not tags or any(tag in card["tags"] for tag in tags)) and (
+            not backlinks
+            or any(backlink in card["backlinks"] for backlink in backlinks)
         ):
-            if include:
+            if (include_tags and all(tag in card["tags"] for tag in tags)) or (
+                include_backlinks
+                and all(backlink in card["backlinks"] for backlink in backlinks)
+            ):
                 selected_cards.append(card)
-            else:
-                if not (set(tags.split(",")) & set(card["tags"])) and not (
-                    set(backlinks.split(",")) & set(card["backlinks"])
-                ):
-                    selected_cards.append(card)
 
         if len(selected_cards) >= num_cards:
             break
