@@ -4,6 +4,7 @@ import json
 import re
 import io
 
+from google.oauth2 import service_account
 from googleapiclient.http import MediaIoBaseDownload, MediaIoBaseUpload
 from googleapiclient.errors import HttpError
 from googleapiclient.discovery import build
@@ -22,11 +23,9 @@ class GoogleDriveManager:
         self._authenticate()
 
     def _authenticate(self) -> None:
-        flow = InstalledAppFlow.from_client_secrets_file(
-            self.credentials_file_path, self.SCOPES
+        credentials = service_account.Credentials.from_service_account_file(
+            self.credentials_file_path, scopes=self.SCOPES
         )
-
-        credentials = flow.run_local_server()
 
         self.drive_service = build("drive", "v3", credentials=credentials)
 
