@@ -70,6 +70,9 @@ async def rev(ctx, num_cards: int, *args: str) -> None:
     include_backlinks = False
 
     for arg in args:
+        arg = arg.replace("-", " ")
+        arg = arg.lower()
+
         if arg.isdigit():
             num_cards = int(arg)
         elif arg.startswith("#"):
@@ -89,9 +92,9 @@ async def rev(ctx, num_cards: int, *args: str) -> None:
             not backlinks
             or any(backlink in card["backlinks"] for backlink in backlinks)
         ):
-            if (include_tags and all(tag in card["tags"] for tag in tags)) or (
+            if (include_tags and any(tag in card["tags"] for tag in tags)) or (
                 include_backlinks
-                and all(backlink in card["backlinks"] for backlink in backlinks)
+                and any(backlink in card["backlinks"] for backlink in backlinks)
             ):
                 selected_cards.append(card)
 
