@@ -30,14 +30,14 @@ class GoogleDriveManager:
 
         self.drive_service = build("drive", "v3", credentials=credentials)
 
-    def extract_backlinks(self, content) -> list[str]:
+    def extract_backlinks(self, content) -> list:
         extracted_backlinks = re.findall(r"\[\[(.*?)\]\]", content)
 
         backlinks = [backlink.lower() for backlink in extracted_backlinks]
 
         return backlinks
 
-    def extract_tags(self, content) -> list[str]:
+    def extract_tags(self, content) -> list:
         extracted_tags = re.findall(r"#(\w+)", content)
 
         tags = [tag.lower() for tag in extracted_tags]
