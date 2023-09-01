@@ -58,7 +58,7 @@ async def update(ctx) -> None:
         color=discord.Color.purple(),
     )
 
-    embed.set_footer(text="Made with 💜 by Bonsaï#8521")
+    embed.set_footer(text="Made with 💜 by bonsainoodle")
 
     await ctx.send(embed=embed)
 
