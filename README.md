@@ -119,6 +119,8 @@ you can add as many backlinks and tags as you want.
 
 if some backlinks or tags have spaces in them, you need to replace the spaces with `-` when executing the command.
 
+finally, if you are using latex in your notes, make sure to use `$$` or `$` to enclose your latex code.
+
 ## license
 
 [MIT](https://choosealicense.com/licenses/mit/)
