@@ -86,7 +86,7 @@ the `!rev` command takes the following arguments:
 
 Here is an example command:
 
-```bash
+```
 !rev 10 [[Polynomials]] [[Complex-Numbers]] #Series include_tags include_backlinks
 ```
 
