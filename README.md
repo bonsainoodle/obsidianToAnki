@@ -12,13 +12,13 @@ then you can either send a message to the bot in dm, or invite it to the discord
 
 the bot requires at least python 3.8
 
-```bash
+```
 git clone https://github.com/bonsainoodle/obsidianToAnki
 ```
 
 then run under the `obsidianToAnki` directory
 
-```bash
+```
 pip install -r requirements.txt
 pip install -U git+https://github.com/Rapptz/discord.py
 ```
@@ -61,7 +61,7 @@ once you have downloaded the credentials file, move it to the `obsidianToAnki` d
 
 execute the `start.py` file at the root of the `obsidianToAnki` directory.
 
-```bash
+```
 python start.py
 ```
 
