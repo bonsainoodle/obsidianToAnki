@@ -8,7 +8,6 @@ from google.oauth2 import service_account
 from googleapiclient.http import MediaIoBaseDownload, MediaIoBaseUpload
 from googleapiclient.errors import HttpError
 from googleapiclient.discovery import build
-from google_auth_oauthlib.flow import InstalledAppFlow
 
 
 class GoogleDriveManager:
@@ -29,19 +28,19 @@ class GoogleDriveManager:
 
         self.drive_service = build("drive", "v3", credentials=credentials)
 
-    def extract_backlinks(self, content) -> list:
-        extracted_backlinks = re.findall(r"\[\[(.*?)\]\]", content)
-
-        backlinks = [backlink.lower() for backlink in extracted_backlinks]
-
-        return backlinks
-
     def extract_tags(self, content) -> list:
         extracted_tags = re.findall(r"#(\w+)", content)
 
         tags = [tag.lower() for tag in extracted_tags]
 
         return tags
+
+    def extract_backlinks(self, content) -> list:
+        extracted_backlinks = re.findall(r"\[\[(.*?)\]\]", content)
+
+        backlinks = [backlink.lower() for backlink in extracted_backlinks]
+
+        return backlinks
 
     def delete_data_folder(self) -> None:
         if os.path.exists(self.data_folder_path):
@@ -95,6 +94,11 @@ class GoogleDriveManager:
             with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
+                try:
+                    content_before, content_after = content.split("---")
+                except Exception:
+                    return
+
                 backlinks = self.extract_backlinks(content)
                 tags = self.extract_tags(content)
 
@@ -103,6 +107,8 @@ class GoogleDriveManager:
                     "name": file_name,
                     "backlinks": backlinks,
                     "tags": tags,
+                    "content_before": content_before,
+                    "content_after": content_after,
                 }
 
                 self.processed_data.append(data)
@@ -118,11 +124,9 @@ class GoogleDriveManager:
         )
         self.save_processed_data()
 
-    def upload_text_file(
-        self, parent_folder_id: str, file_name: str, content: str
-    ) -> None:
+    def upload_file(self, parent_folder_id: str, file_name: str, content: str) -> None:
         file_metadata = {"name": file_name, "parents": [parent_folder_id]}
-        media = MediaIoBaseUpload(io.BytesIO(content.encode()), mimetype="text/plain")
+        media = MediaIoBaseUpload(io.BytesIO(content), mimetype="text/plain")
         self.drive_service.files().create(
             body=file_metadata, media_body=media
         ).execute()

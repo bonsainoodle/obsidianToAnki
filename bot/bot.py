@@ -2,6 +2,8 @@ import repackage
 
 repackage.up()
 
+import os
+
 import json
 
 import random
@@ -12,7 +14,12 @@ import time
 import discord
 from discord.ext import commands
 
+import genanki
+
+import tempfile
+
 from libs.GoogleDriveManager import GoogleDriveManager
+from libs.tools import replace_latex_delimiters, remove_text
 
 with open("config.json", "r") as f:
     config = json.load(f)
@@ -115,15 +122,61 @@ async def rev(ctx, num_cards: int, *args: str) -> None:
         return
 
     now = datetime.datetime.now()
-    file_name = f"{now.strftime('%Y-%m-%d-%H-%M-%S')}.md"
+    file_name = f"{now.strftime('%Y-%m-%d-%H-%M-%S')}.apkg"
 
-    content = f"Titre: {file_name} - {len(selected_cards)} cartes\n"
+    anki_model = genanki.Model(
+        random.randrange(1 << 30, 1 << 31),
+        file_name,
+        fields=[
+            {"name": "ContentBefore"},
+            {"name": "ContentAfter"},
+        ],
+        templates=[
+            {
+                "name": "Card 1",
+                "qfmt": "{{ContentBefore}}",
+                "afmt": '{{FrontSide}}<hr id="answer">{{ContentAfter}}',
+            },
+        ],
+    )
+
+    anki_deck = genanki.Deck(random.randrange(1 << 30, 1 << 31), file_name)
 
     for card in selected_cards:
-        content += f"\n![[{card['name'].split('.')[0]}]]"
+        my_note = genanki.Note(
+            model=anki_model,
+            fields=[
+                remove_text(
+                    replace_latex_delimiters(card["content_before"])
+                ),
+                remove_text(
+                    replace_latex_delimiters(card["content_after"])
+                ),
+            ],
+            tags=card["tags"],
+        )
 
-    google_drive_manager.upload_text_file(
-        parent_folder_id=config["rev_folder_id"], file_name=file_name, content=content
+        anki_deck.add_note(my_note)
+
+    anki_package = genanki.Package(anki_deck)
+
+    temp_dir = tempfile.mkdtemp(prefix="anki_export_")
+
+    output_file_path = os.path.join(temp_dir, file_name)
+
+    anki_package.write_to_file(output_file_path)
+
+    with open(output_file_path, "rb") as apkg_file:
+        apkg_content = apkg_file.read()
+
+    os.remove(output_file_path)
+
+    os.rmdir(temp_dir)
+
+    google_drive_manager.upload_file(
+        parent_folder_id=config["rev_folder_id"],
+        file_name=file_name,
+        content=apkg_content,
     )
 
     time.sleep(1)
