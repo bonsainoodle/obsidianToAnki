@@ -38,7 +38,7 @@ google_drive_manager = GoogleDriveManager(
 @bot.event
 async def on_ready() -> None:
     print("------")
-    print("DiscordBot: Logged in as")
+    print("Discord Bot: Logged in as")
     print(bot.user.name)
     print(bot.user.id)
     print("------")
