@@ -11,9 +11,13 @@ from googleapiclient.discovery import build
 
 
 class GoogleDriveManager:
-    def __init__(self, credentials_file_path: str, data_folder_path: str) -> None:
+    def __init__(
+        self, credentials_file_path: str, data_folder_path: str, obsidian_separator: str
+    ) -> None:
         self.credentials_file_path = credentials_file_path
         self.data_folder_path = data_folder_path
+
+        self.obsidian_separator = obsidian_separator
 
         self.SCOPES = ["https://www.googleapis.com/auth/drive"]
 
@@ -95,7 +99,9 @@ class GoogleDriveManager:
                 content = f.read()
 
                 try:
-                    content_before, content_after = content.split("---")
+                    content_before, content_after = content.split(
+                        self.obsidian_separator
+                    )
                 except Exception:
                     return
 

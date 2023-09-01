@@ -40,14 +40,15 @@ it should look like this:
 }
 ```
 
-| Key                   | Description                                                                             | Default | Required |
-| --------------------- | --------------------------------------------------------------------------------------- | ------- | -------- |
-| credentials_file_path | path to credentials file                                                                | None    | True     |
-| data_folder_path      | path to the folder where the Obsidian notes will be downloaded                          | None    | True     |
-| rev_folder_id         | google drive id of the folder in which the Anki decks will be stored (last part of url) | None    | True     |
-| folder_id             | google drive id of the folder in which the Obsidian notes are stored (last part of url) | None    | True     |
-| bot_token             | secret token of the discord bot                                                         | None    | True     |
-| bot_prefix            | prefix of the discord bot                                                               | None    | True     |
+| Key                   | Description                                                                                                             | Default | Required |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------- | -------- |
+| credentials_file_path | path to credentials file                                                                                                | None    | True     |
+| data_folder_path      | path to the folder where the Obsidian notes will be downloaded                                                          | None    | True     |
+| rev_folder_id         | google drive id of the folder in which the Anki decks will be stored (last part of url)                                 | None    | True     |
+| folder_id             | google drive id of the folder in which the Obsidian notes are stored (last part of url)                                 | None    | True     |
+| bot_token             | secret token of the discord bot                                                                                         | None    | True     |
+| bot_prefix            | prefix of the discord bot                                                                                               | None    | True     |
+| obsidian_separator    | allows the bot to detect which part of the note should be on the front of the card and which part should be on the back | None    | True     |
 
 now you need to create a google service account and download the credentials file.
 
@@ -72,6 +73,8 @@ the bot has 2 commands:
 -   `!update` : downloads the Obsidian notes from the google drive folder to the `data` folder
 -   `!rev` : generates an Anki deck from the Obsidian notes in the `data` folder
 
+in order to detect which part of the note is the front of the card and which part is the back of the card, make sure to include the Obsidian separator defined in the `config.json` file in your notes.
+
 each time you modify you Obsidian notes, you need to run the `!update` command before running the `!rev` command.
 
 depending on the number of cards you have, the `!update` command can take a while to execute so wait for the bot to send you a message before sending another command.
@@ -83,6 +86,26 @@ the `!rev` command takes the following arguments:
 -   some tags (optional)
 -   whether or not the backlinks should be included in the cards (optional)
 -   whether or not the tags should be included in the cards (optional)
+
+Here is an example note:
+
+```md
+[[Polynomials]]
+[[Complexes]]
+
+Let $n be \in \mathbb{N}^*, \quad deg(P) \leq n - 1$.
+
+Show:
+$$P(0) = \frac{1}{n} \sum_{k=0}^{n-1} P(e^{\frac{2ik\pi}{n}})$$
+$$forall a \in \mathbb{C}, P(z) = \frac{1}{n} \sum_{k=0}^{n-1} P(z + ae^{\frac{2ik\pi}{n}})$$
+
+---
+
+-   Show the sum of the roots n-th unit (we know it's 0)
+-   Inverting sums
+-   Assume $Q(Z) = P(z + aZ)$$.
+-   P(z) = Q(0)$ use the first formula
+```
 
 Here is an example command:
 
