@@ -146,12 +146,8 @@ async def rev(ctx, num_cards: int, *args: str) -> None:
         my_note = genanki.Note(
             model=anki_model,
             fields=[
-                remove_text(
-                    replace_latex_delimiters(card["content_before"])
-                ),
-                remove_text(
-                    replace_latex_delimiters(card["content_after"])
-                ),
+                remove_text(replace_latex_delimiters(card["content_before"])),
+                remove_text(replace_latex_delimiters(card["content_after"])),
             ],
             tags=card["tags"],
         )
@@ -191,7 +187,7 @@ async def rev(ctx, num_cards: int, *args: str) -> None:
         color=discord.Color.purple(),
     )
 
-    embed.set_footer(text="Made with 💜 by Bonsaï#8521")
+    embed.set_footer(text="Made with 💜 by bonsainoodle")
 
     await ctx.send(embed=embed)
 
