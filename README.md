@@ -91,7 +91,7 @@ Here is an example note:
 
 ```md
 [[Polynomials]]
-[[Complexes]]
+[[Complex Numbers]]
 
 Let $n be \in \mathbb{N}^*, \quad deg(P) \leq n - 1$.
 
