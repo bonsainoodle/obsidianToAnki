@@ -36,7 +36,8 @@ it should look like this:
     "rev_folder_id": "10A-T7M9oSskKTLTFoF24MpSEIzsxarZU",
     "folder_id": "10A-T7M9oSskKTLTFoF24MpSEIzsxarZU",
     "bot_token": "TOKEN",
-    "bot_prefix": "!"
+    "bot_prefix": "!",
+    "obsidian_separator": "---"
 }
 ```
 
