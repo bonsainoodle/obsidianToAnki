@@ -77,7 +77,7 @@ async def rev(ctx, num_cards: int, *args: str) -> None:
     include_backlinks = False
 
     for arg in args:
-        arg = arg.replace("-", " ")
+        arg = arg.replace("=", " ")
         arg = arg.lower()
 
         if arg.isdigit():
